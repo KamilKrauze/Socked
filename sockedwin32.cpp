@@ -24,6 +24,17 @@ void skdCreateSocket(SKDSocket& skt, int af, int type, int protocol)
     }
 }
 
+void skdCloseSocket(SKDSocket& skt)
+{
+    closesocket(skt.socket);
+}
+
+void skdDestroySocket(SKDSocket& skt)
+{
+    closesocket(skt.socket);
+    WSACleanup();
+}
+
 void skdSetSocketOpt(SKDSocket& skt, int level, int optname, int optval)
 {
     if (setsockopt(skt.socket, level, optname, (char*)&optval, sizeof(optval)) == SOCKET_ERROR) {
@@ -69,17 +80,6 @@ void skdConnectSocket(SKDSocket& skt)
         closesocket(skt.socket);
         WSACleanup();
     }
-}
-
-void skdCloseSocket(SKDSocket& skt)
-{
-    closesocket(skt.socket);
-}
-
-void skdDestroySocket(SKDSocket& skt)
-{
-    closesocket(skt.socket);
-    WSACleanup();
 }
 
 #endif
