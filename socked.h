@@ -20,12 +20,13 @@
 struct SKDSocket
 {
     uint64_t socket;
-    sockaddr_in address;
+    sockaddr_in specs;
 };
 
 void skdInitSocket();
 void skdCreateSocket(SKDSocket& skt, int af, int type, int protocol);
 void skdSetSocketOpt(SKDSocket& skt, int level, int optname, int optval);
+void skdSetSocketSpecs(SKDSocket& skt, uint16_t family, const char* address, uint16_t port);
 void skdBindSocket(SKDSocket& skt, uint16_t family, const char* address, uint16_t port);
 void skdCreateListener(SKDSocket& skt, uint64_t backlog);
 void skdConnectSocket(SKDSocket& skt);

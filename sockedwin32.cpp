@@ -31,20 +31,22 @@ void skdSetSocketOpt(SKDSocket& skt, int level, int optname, int optval)
     }
 }
 
+void skdSetSocketSpecs(SKDSocket& skt, uint16_t family, const char* address, uint16_t port)
+{
+    skt.specs.sin_family = family;
+    skt.specs.sin_addr.s_addr = inet_addr(address);
+    skt.specs.sin_port = htons(port);
+}
+
 void skdBindSocket(SKDSocket& skt, uint16_t family, const char* address, uint16_t port)
 {
-    sockaddr_in sock_addr;
-    sock_addr.sin_family = family;
-    sock_addr.sin_addr.s_addr = inet_addr(address);
-    sock_addr.sin_port = htons(port);
+    skdSetSocketSpecs(skt, family, address, port);
 
-    if (bind(skt.socket, (struct sockaddr*)&sock_addr, sizeof(sock_addr)) == SOCKET_ERROR) {
+    if (bind(skt.socket, (struct sockaddr*)&skt.specs, sizeof(skt.specs)) == SOCKET_ERROR) {
         closesocket(skt.socket);
         WSACleanup();
         std::cerr << "Bind failed. Error Code: " << WSAGetLastError() << "\n";
     }
-
-    skt.address = sock_addr;
 }
 
 void skdCreateListener(SKDSocket& skt, uint64_t backlog)
@@ -59,7 +61,7 @@ void skdCreateListener(SKDSocket& skt, uint64_t backlog)
 
 void skdConnectSocket(SKDSocket& skt)
 {
-    if (connect(skt.socket, (struct sockaddr*)&skt.address, sizeof(skt.address)) == SOCKET_ERROR)
+    if (connect(skt.socket, (struct sockaddr*)&skt.specs, sizeof(skt.specs)) == SOCKET_ERROR)
     {
         int error = WSAGetLastError();
         std::cerr << "Connection failed. Error Code: " << error << "\n";
