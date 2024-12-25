@@ -23,18 +23,23 @@ struct SKDSocket
     sockaddr_in specs;
 };
 
+#pragma region Init/Destroy
 void skdInitSocket();
 void skdCreateSocket(SKDSocket& skt, int af, int type, int protocol);
 void skdCloseSocket(SKDSocket& skt);
 void skdDestroySocket(SKDSocket& skt);
+#pragma endregion
 
+#pragma region Setters
 void skdSetSocketOpt(SKDSocket& skt, int level, int optname, int optval);
 void skdSetSocketSpecs(SKDSocket& skt, uint16_t family, const char* address, uint16_t port);
+#pragma endregion
 
+#pragma region Server/Client
 void skdBindSocket(SKDSocket& skt, uint16_t family, const char* address, uint16_t port);
 void skdConnectSocket(SKDSocket& skt);
 void skdCreateListener(SKDSocket& skt, uint64_t backlog);
-
+#pragma endregion
 
 #endif // !SOCKED_H
 
