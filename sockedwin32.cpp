@@ -29,7 +29,7 @@ void skdCloseSocket(SkdSocket& skt)
     closesocket(skt.socket);
 }
 
-void skdDestroySocket(SkdSocket& skt)
+void skdCleanupSocket(SkdSocket& skt)
 {
     closesocket(skt.socket);
     WSACleanup();

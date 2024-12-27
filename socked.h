@@ -7,10 +7,10 @@
 #include "sockedwin32.h"
 
 #elif defined (__linux__)
-#include "sockedlinux.h"
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
+#include "sockedlinux.h"
 
 #else
 #error Platform is not supported currently!
@@ -50,7 +50,7 @@ struct SkdSocket
 void skdInitSocket();
 void skdCreateSocket(SkdSocket& skt, int af, int type, int protocol);
 void skdCloseSocket(SkdSocket& skt);
-void skdDestroySocket(SkdSocket& skt);
+void skdCleanupSocket(SkdSocket& skt);
 
 void skdSetSocketOpt(SkdSocket& skt, int level, int optname, int optval);
 void skdSetSocketSpecs(SkdSocket& skt, uint16_t family, const char* address, uint16_t port);
