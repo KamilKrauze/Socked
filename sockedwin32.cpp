@@ -14,7 +14,7 @@ void skdInitSocket()
     }
 }
 
-void skdCreateSocket(SKDSocket& skt, int af, int type, int protocol)
+void skdCreateSocket(SkdSocket& skt, int af, int type, int protocol)
 {
     skt.socket = socket(af, type, protocol);
     if (skt.socket == INVALID_SOCKET) {
@@ -24,32 +24,32 @@ void skdCreateSocket(SKDSocket& skt, int af, int type, int protocol)
     }
 }
 
-void skdCloseSocket(SKDSocket& skt)
+void skdCloseSocket(SkdSocket& skt)
 {
     closesocket(skt.socket);
 }
 
-void skdDestroySocket(SKDSocket& skt)
+void skdDestroySocket(SkdSocket& skt)
 {
     closesocket(skt.socket);
     WSACleanup();
 }
 
-void skdSetSocketOpt(SKDSocket& skt, int level, int optname, int optval)
+void skdSetSocketOpt(SkdSocket& skt, int level, int optname, int optval)
 {
     if (setsockopt(skt.socket, level, optname, (char*)&optval, sizeof(optval)) == SOCKET_ERROR) {
         std::cerr << "Failed to set socket options. Error Code: " << WSAGetLastError() << "\n";
     }
 }
 
-void skdSetSocketSpecs(SKDSocket& skt, uint16_t family, const char* address, uint16_t port)
+void skdSetSocketSpecs(SkdSocket& skt, uint16_t family, const char* address, uint16_t port)
 {
-    skt.specs.sin_family = family;
-    skt.specs.sin_addr.s_addr = inet_addr(address);
-    skt.specs.sin_port = htons(port);
+    skt.specs.family = family;
+    skt.specs.address.data = inet_addr(address);
+    skt.specs.port = htons(port);
 }
 
-void skdBindSocket(SKDSocket& skt, uint16_t family, const char* address, uint16_t port)
+void skdBindSocket(SkdSocket& skt, uint16_t family, const char* address, uint16_t port)
 {
     skdSetSocketSpecs(skt, family, address, port);
 
@@ -60,7 +60,7 @@ void skdBindSocket(SKDSocket& skt, uint16_t family, const char* address, uint16_
     }
 }
 
-void skdCreateListener(SKDSocket& skt, uint64_t backlog)
+void skdCreateListener(SkdSocket& skt, uint64_t backlog)
 {
     if (listen(skt.socket, backlog) == SOCKET_ERROR) {
         closesocket(skt.socket);
@@ -70,7 +70,7 @@ void skdCreateListener(SKDSocket& skt, uint64_t backlog)
     }
 }
 
-void skdConnectSocket(SKDSocket& skt)
+void skdConnectSocket(SkdSocket& skt)
 {
     if (connect(skt.socket, (struct sockaddr*)&skt.specs, sizeof(skt.specs)) == SOCKET_ERROR)
     {

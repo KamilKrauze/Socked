@@ -17,23 +17,47 @@
 #endif
 
 #include <cstdint>
-struct SKDSocket
+
+struct SkdSocketSpecs
+{
+    uint16_t family;
+    uint16_t port;
+    
+    union
+    {
+        struct {
+            uint8_t network; // Network identifier
+            uint8_t host; // Host on the network
+            uint8_t logic_host; // Logical host
+            uint8_t imp_number; // IMP number
+        } bytes;
+        struct { 
+            uint16_t unused; // ---
+            uint16_t imp; // IMP field 
+        } words;
+        uint32_t data;
+    } address;
+
+    char zero[8];
+};
+
+struct SkdSocket
 {
     uint64_t socket;
-    sockaddr_in specs;
+    SkdSocketSpecs specs;
 };
 
 void skdInitSocket();
-void skdCreateSocket(SKDSocket& skt, int af, int type, int protocol);
-void skdCloseSocket(SKDSocket& skt);
-void skdDestroySocket(SKDSocket& skt);
+void skdCreateSocket(SkdSocket& skt, int af, int type, int protocol);
+void skdCloseSocket(SkdSocket& skt);
+void skdDestroySocket(SkdSocket& skt);
 
-void skdSetSocketOpt(SKDSocket& skt, int level, int optname, int optval);
-void skdSetSocketSpecs(SKDSocket& skt, uint16_t family, const char* address, uint16_t port);
+void skdSetSocketOpt(SkdSocket& skt, int level, int optname, int optval);
+void skdSetSocketSpecs(SkdSocket& skt, uint16_t family, const char* address, uint16_t port);
 
-void skdBindSocket(SKDSocket& skt, uint16_t family, const char* address, uint16_t port);
-void skdConnectSocket(SKDSocket& skt);
-void skdCreateListener(SKDSocket& skt, uint64_t backlog);
+void skdBindSocket(SkdSocket& skt, uint16_t family, const char* address, uint16_t port);
+void skdConnectSocket(SkdSocket& skt);
+void skdCreateListener(SkdSocket& skt, uint64_t backlog);
 
 #endif // !SOCKED_H
 
