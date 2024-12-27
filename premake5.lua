@@ -2,7 +2,8 @@ workspace "Socked"
     architecture "x64"
     configurations { "Debug", "Release" }
 
-targetdir "build/%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+    targetdir "build/%{cfg.buildcfg}/"
+    targetname "%{prj.name}-%{cfg.system}-%{cfg.architecture}"
 
 -- Build configurations
 filter "configurations:Debug"
@@ -15,7 +16,7 @@ filter "configurations:Release"
 
 project "Socked"
     location "./"
-    kind "ConsoleApp"
+    kind "StaticLib"
     language "C++"
 
     files { 
