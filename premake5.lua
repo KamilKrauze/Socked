@@ -16,7 +16,7 @@ filter "configurations:Release"
 
 project "Socked"
     location "./"
-    kind "StaticLib"
+    kind "Utility"
     language "C++"
 
     files { 
