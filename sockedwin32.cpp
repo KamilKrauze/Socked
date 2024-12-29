@@ -2,6 +2,7 @@
 
 #include "sockedwin32.h"
 
+#include <cstdio>
 #include <stdexcept>
 #include <sstream>
 #include <iostream>
@@ -38,15 +39,22 @@ void skdCleanupSocket(SkdSocket& skt)
 void skdSetSocketOpt(SkdSocket& skt, int level, int optname, int optval)
 {
     if (setsockopt(skt.socket, level, optname, (char*)&optval, sizeof(optval)) == SOCKET_ERROR) {
-        std::cerr << "Failed to set socket options. Error Code: " << WSAGetLastError() << "\n";
+        printf("Failed to set socket options, error: %d", WSAGetLastError());
     }
 }
 
 void skdSetSocketSpecs(SkdSocket& skt, uint16_t family, const char* address, uint16_t port)
 {
     skt.specs.family = family;
-    skt.specs.address.data = inet_addr(address);
     skt.specs.port = htons(port);
+    if (inet_pton(skt.specs.family, address, &skt.specs.address.data) <= 0)
+    {
+        std::cerr << "Invalid address!" << std::endl;
+        closesocket(skt.socket);
+        return;
+    }
+
+    printf("Setting socket specification to: \n\t- Family[%d]\n\t- Addr[%s] ==> [%u]\n\t- Port[%d] ==> [%d]\n", family, address, skt.specs.address.data, port, skt.specs.port);
 }
 
 void skdBindSocket(SkdSocket& skt, uint16_t family, const char* address, uint16_t port)
@@ -65,7 +73,7 @@ void skdCreateListener(SkdSocket& skt, uint64_t backlog)
     if (listen(skt.socket, backlog) == SOCKET_ERROR) {
         closesocket(skt.socket);
         WSACleanup();
-        
+
         std::cerr << "Failed to create listener. Error Code: " << WSAGetLastError() << std::endl;
     }
 }
@@ -74,8 +82,7 @@ void skdConnectSocket(SkdSocket& skt)
 {
     if (connect(skt.socket, (struct sockaddr*)&skt.specs, sizeof(skt.specs)) == SOCKET_ERROR)
     {
-        int error = WSAGetLastError();
-        std::cerr << "Connection failed. Error Code: " << error << "\n";
+        std::cerr << "Connection failed. Error Code: " << WSAGetLastError() << "\n";
 
         closesocket(skt.socket);
         WSACleanup();
