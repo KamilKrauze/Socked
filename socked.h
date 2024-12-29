@@ -82,16 +82,16 @@ void skdCreateListener(SkdSocket& skt, uint64_t backlog);
 /* Socket data sending and retrieval */
 
 // Send data via TCP
-void skdSend(SkdSocket& skt, const char* msg, int flags);
+void skdSend(SkdSocket& skt, const char* msg, size_t size, int flags);
 
 // Send data via Datagram
-void skdSendTo(SkdSocket& skt, const char* msg, int flags);
+void skdSendTo(SkdSocket& skt, const char* msg, size_t size, int flags);
 
 // Receive data from TCP connection
-uint64_t skdReceive(SkdSocket& skt, char* buffer, int flags);
+uint64_t skdReceive(SkdSocket& skt, char* buffer, size_t size, int flags);
 
 // Receive data from Datagram connection.
-uint64_t skdReceiveFrom(SkdSocket& skt, char* buffer, int flags);
+uint64_t skdReceiveFrom(SkdSocket& skt, char* buffer, size_t size, int flags);
 
 #endif // !SOCKED_H
 

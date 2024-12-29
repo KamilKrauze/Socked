@@ -89,25 +89,25 @@ void skdConnectSocket(SkdSocket& skt)
     }
 }
 
-void skdSend(SkdSocket& skt, const char* msg, int flags)
+void skdSend(SkdSocket& skt, const char* msg, size_t size, int flags)
 {
-    send(skt.socket, msg, strlen(msg), flags);
+    send(skt.socket, msg, size, flags);
 }
 
-void skdSendTo(SkdSocket& skt, const char* msg, int flags)
+void skdSendTo(SkdSocket& skt, const char* msg, size_t size, int flags)
 {
-    sendto(skt.socket, msg, strlen(msg), flags, (struct sockaddr*)skt.specs.address.data, sizeof(skt.specs.address.data));
+    sendto(skt.socket, msg, size, flags, (struct sockaddr*)skt.specs.address.data, sizeof(skt.specs.address.data));
 }
 
-uint64_t skdReceive(SkdSocket& skt, char* buffer, int flags)
+uint64_t skdReceive(SkdSocket& skt, char* buffer, size_t size, int flags)
 {
-    return recv(skt.socket, buffer, sizeof(buffer), flags);
+    return recv(skt.socket, buffer, size, flags);
 }
 
-uint64_t skdReceiveFrom(SkdSocket& skt, char* buffer, int flags)
+uint64_t skdReceiveFrom(SkdSocket& skt, char* buffer, size_t size, int flags)
 {
     int addr_size = sizeof(skt.specs.address.data);
-    return recvfrom(skt.socket, buffer, sizeof(buffer), flags, (struct sockaddr*)skt.specs.address.data, &addr_size);
+    return recvfrom(skt.socket, buffer, size, flags, (struct sockaddr*)skt.specs.address.data, &addr_size);
 }
 
 #endif
