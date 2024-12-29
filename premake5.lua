@@ -3,7 +3,7 @@ workspace "Socked"
     configurations { "Debug", "Release" }
 
     targetdir "build/%{cfg.buildcfg}/"
-    targetname "%{prj.name}-%{cfg.system}-%{cfg.architecture}"
+    targetname "%{prj.name}"
 
 -- Build configurations
 filter "configurations:Debug"
@@ -16,7 +16,7 @@ filter "configurations:Release"
 
 project "Socked"
     location "./"
-    kind "Utility"
+    kind "StaticLib"
     language "C++"
 
     files { 
