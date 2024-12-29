@@ -1,3 +1,4 @@
+#if defined(__linux__)
 #include "sockedlinux.h"
 
 #include <iostream>
@@ -79,3 +80,4 @@ void skdCreateListener(SkdSocket& skt, uint64_t backlog)
         exit(EXIT_FAILURE);
     }
 }
+#endif
