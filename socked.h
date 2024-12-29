@@ -19,12 +19,19 @@
 
 #include <cstdint>
 
+/// <summary>
+/// Stores socket specification.
+/// </summary>
 struct SkdSocketSpecs
 {
+    // Address family IPv4/IPv6
     uint16_t family;
+
+    // Network port
     uint16_t port;
     
-    union
+    // Network address
+    union Address
     {
         struct {
             uint8_t network; // Network identifier
@@ -42,23 +49,49 @@ struct SkdSocketSpecs
     char zero[8];
 };
 
+/// <summary>
+/// The network socket data
+/// </summary>
 struct SkdSocket
 {
+    // Socket pointer
     uint64_t socket;
+
+    // Socket specification
     SkdSocketSpecs specs;
 };
+
+/* Socket creation/destruction */
 
 void skdInitSocket();
 void skdCreateSocket(SkdSocket& skt, int af, int type, int protocol);
 void skdCloseSocket(SkdSocket& skt);
 void skdCleanupSocket(SkdSocket& skt);
 
+/* Socket mutation */
+
 void skdSetSocketOpt(SkdSocket& skt, int level, int optname, int optval);
 void skdSetSocketSpecs(SkdSocket& skt, uint16_t family, const char* address, uint16_t port);
+
+/* Socket connection/listening */
 
 void skdBindSocket(SkdSocket& skt, uint16_t family, const char* address, uint16_t port);
 void skdConnectSocket(SkdSocket& skt);
 void skdCreateListener(SkdSocket& skt, uint64_t backlog);
+
+/* Socket data sending and retrieval */
+
+// Send data via TCP
+void skdSend(SkdSocket& skt, const char* msg, int flags);
+
+// Send data via Datagram
+void skdSendTo(SkdSocket& skt, const char* msg, int flags);
+
+// Receive data from TCP connection
+uint64_t skdReceive(SkdSocket& skt, char* buffer, int flags);
+
+// Receive data from Datagram connection.
+uint64_t skdReceiveFrom(SkdSocket& skt, char* buffer, int flags);
 
 #endif // !SOCKED_H
 

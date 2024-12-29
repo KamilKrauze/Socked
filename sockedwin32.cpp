@@ -11,7 +11,7 @@ void skdInitSocket()
 {
     WSADATA skdWSA;
     if (WSAStartup(MAKEWORD(2, 2), &skdWSA) != 0) {
-        std::cerr << "WSAStartup failed. Error Code: " << WSAGetLastError() << "\n";
+        std::cerr << "WSAStartup failed. WSA Error Code: " << WSAGetLastError() << "\n";
     }
 }
 
@@ -21,7 +21,7 @@ void skdCreateSocket(SkdSocket& skt, int af, int type, int protocol)
     if (skt.socket == INVALID_SOCKET) {
         closesocket(skt.socket);
         WSACleanup();
-        std::cerr << "Socket creation failed! Error Code: " << WSAGetLastError() << "\n";
+        std::cerr << "Socket creation failed! WSA Error Code: " << WSAGetLastError() << "\n";
     }
 }
 
@@ -39,7 +39,7 @@ void skdCleanupSocket(SkdSocket& skt)
 void skdSetSocketOpt(SkdSocket& skt, int level, int optname, int optval)
 {
     if (setsockopt(skt.socket, level, optname, (char*)&optval, sizeof(optval)) == SOCKET_ERROR) {
-        printf("Failed to set socket options, error: %d", WSAGetLastError());
+        printf("Failed to set socket options, WSA Error Code: %d", WSAGetLastError());
     }
 }
 
@@ -64,7 +64,7 @@ void skdBindSocket(SkdSocket& skt, uint16_t family, const char* address, uint16_
     if (bind(skt.socket, (struct sockaddr*)&skt.specs, sizeof(skt.specs)) == SOCKET_ERROR) {
         closesocket(skt.socket);
         WSACleanup();
-        std::cerr << "Bind failed. Error Code: " << WSAGetLastError() << "\n";
+        std::cerr << "Bind failed. WSA Error Code: " << WSAGetLastError() << "\n";
     }
 }
 
@@ -74,7 +74,7 @@ void skdCreateListener(SkdSocket& skt, uint64_t backlog)
         closesocket(skt.socket);
         WSACleanup();
 
-        std::cerr << "Failed to create listener. Error Code: " << WSAGetLastError() << std::endl;
+        std::cerr << "Failed to create listener. WSA Error Code: " << WSAGetLastError() << std::endl;
     }
 }
 
@@ -82,11 +82,32 @@ void skdConnectSocket(SkdSocket& skt)
 {
     if (connect(skt.socket, (struct sockaddr*)&skt.specs, sizeof(skt.specs)) == SOCKET_ERROR)
     {
-        std::cerr << "Connection failed. Error Code: " << WSAGetLastError() << "\n";
+        std::cerr << "Connection failed. WSA Error Code: " << WSAGetLastError() << "\n";
 
         closesocket(skt.socket);
         WSACleanup();
     }
+}
+
+void skdSend(SkdSocket& skt, const char* msg, int flags)
+{
+    send(skt.socket, msg, strlen(msg), flags);
+}
+
+void skdSendTo(SkdSocket& skt, const char* msg, int flags)
+{
+    sendto(skt.socket, msg, strlen(msg), flags, (struct sockaddr*)skt.specs.address.data, sizeof(skt.specs.address.data));
+}
+
+uint64_t skdReceive(SkdSocket& skt, char* buffer, int flags)
+{
+    return recv(skt.socket, buffer, sizeof(buffer), flags);
+}
+
+uint64_t skdReceiveFrom(SkdSocket& skt, char* buffer, int flags)
+{
+    int addr_size = sizeof(skt.specs.address.data);
+    return recvfrom(skt.socket, buffer, sizeof(buffer), flags, (struct sockaddr*)skt.specs.address.data, &addr_size);
 }
 
 #endif
