@@ -30,9 +30,8 @@ void skdCloseSocket(SkdSocket& skt)
     closesocket(skt.socket);
 }
 
-void skdCleanupSocket(SkdSocket& skt)
+void skdCleanupSocket()
 {
-    closesocket(skt.socket);
     WSACleanup();
 }
 
@@ -87,6 +86,12 @@ void skdConnectSocket(SkdSocket& skt)
         closesocket(skt.socket);
         WSACleanup();
     }
+}
+
+skdSocketRef skdAccept(SkdSocket& server_skt, SkdSocket& client_skt)
+{
+    int client_addr_size = sizeof(client_skt.specs.address);
+    return accept(server_skt.socket, (struct sockaddr*)&client_skt.specs, &client_addr_size);
 }
 
 void skdSend(SkdSocket& skt, const char* msg, size_t size, int flags)
