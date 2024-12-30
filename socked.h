@@ -57,7 +57,7 @@ struct SkdSocketSpecs
 struct SkdSocket
 {
     // Socket pointer
-    socketref socket;
+    skdSocketRef socket;
 
     // Socket specification
     SkdSocketSpecs specs;
