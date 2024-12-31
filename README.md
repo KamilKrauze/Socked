@@ -5,7 +5,7 @@
 > 
 > |Platforms     |Supports?             |Tested   |
 > |--------------|----------------------|---------|
-> |Windows 10/11 |- [x]                 |Yes      |
+> |Windows 10/11 | - [x] Yes             |Yes      |
 > |Linux         |Partially             |Partially|
 > |MacOS         |N/A                   |N/A      |
 >
