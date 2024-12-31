@@ -104,7 +104,7 @@ void skdSendTo(SkdSocket& skt, const char* msg, size_t size, int flags)
     sendto(skt.socket, msg, size, flags, (struct sockaddr*)skt.specs.address.data, sizeof(skt.specs.address.data));
 }
 
-uint64_t skdReceive(SkdSocket& skt, char* buffer, size_t size, int flags)
+uint64_t skdReceive(SkdSocket& skt, char* buffer, int size, int flags)
 {
     uint64_t bytes = 0;
     bytes = recv(skt.socket, buffer, size, flags);
