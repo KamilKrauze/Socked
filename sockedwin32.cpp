@@ -57,6 +57,12 @@ extern "C" {
         printf("Setting socket specification to: \n\t- Family[%d]\n\t- Addr[%s] ==> [%u]\n\t- Port[%d] ==> [%d]\n", family, address, skt.specs.address.data, port, skt.specs.port);
     }
 
+    void skdAccept(SkdSocket& server_skt, SkdSocket& client_skt)
+    {
+        int client_addr_size = sizeof(client_skt.specs);
+        client_skt.socket = accept(server_skt.socket, (struct sockaddr*)&client_skt.specs, &client_addr_size);
+    }
+
     void skdBindSocket(SkdSocket& skt, uint16_t family, const char* address, uint16_t port)
     {
         skdSetSocketSpecs(skt, family, address, port);
