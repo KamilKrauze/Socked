@@ -76,7 +76,7 @@ extern "C" {
     void skdSetSocketSpecs(SkdSocket& skt, uint16_t family, const char* address, uint16_t port);
 
     /* Socket connection/listening */
-
+    void skdAccept(SkdSocket& server_skt, SkdSocket& client_skt);
     void skdBindSocket(SkdSocket& skt, uint16_t family, const char* address, uint16_t port);
     void skdConnectSocket(SkdSocket& skt);
     void skdCreateListener(SkdSocket& skt, uint64_t backlog);
@@ -85,15 +85,13 @@ extern "C" {
 
     // Send data via TCP
     void skdSend(SkdSocket& skt, const char* msg, size_t size, int flags);
-
     // Send data via Datagram
     void skdSendTo(SkdSocket& skt, const char* msg, size_t size, int flags);
-
     // Receive data from TCP connection
-    uint64_t skdReceive(SkdSocket& skt, char* buffer, size_t size, int flags);
-
+    int skdReceive(SkdSocket& skt, char* buffer, size_t size, int flags);
     // Receive data from Datagram connection.
-    uint64_t skdReceiveFrom(SkdSocket& skt, char* buffer, size_t size, int flags);
+    int skdReceiveFrom(SkdSocket& skt, char* buffer, size_t size, int flags);
 };
 
 #endif // !SOCKED_H
+

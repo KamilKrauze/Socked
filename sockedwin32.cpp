@@ -33,7 +33,6 @@ extern "C" {
 
     void skdCleanupSocket(SkdSocket& skt)
     {
-        closesocket(skt.socket);
         WSACleanup();
     }
 
@@ -100,12 +99,14 @@ extern "C" {
         sendto(skt.socket, msg, size, flags, (struct sockaddr*)skt.specs.address.data, sizeof(skt.specs.address.data));
     }
 
-    uint64_t skdReceive(SkdSocket& skt, char* buffer, size_t size, int flags)
+    int skdReceive(SkdSocket& skt, char* buffer, size_t size, int flags)
     {
-        return recv(skt.socket, buffer, size, flags);
+        uint64_t bytes = 0;
+        bytes = recv(skt.socket, buffer, size, flags);
+        return bytes;
     }
 
-    uint64_t skdReceiveFrom(SkdSocket& skt, char* buffer, size_t size, int flags)
+    int skdReceiveFrom(SkdSocket& skt, char* buffer, size_t size, int flags)
     {
         int addr_size = sizeof(skt.specs.address.data);
         return recvfrom(skt.socket, buffer, size, flags, (struct sockaddr*)skt.specs.address.data, &addr_size);
