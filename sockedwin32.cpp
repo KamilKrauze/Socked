@@ -106,7 +106,9 @@ void skdSendTo(SkdSocket& skt, const char* msg, size_t size, int flags)
 
 uint64_t skdReceive(SkdSocket& skt, char* buffer, size_t size, int flags)
 {
-    return recv(skt.socket, buffer, size, flags);
+    uint64_t bytes = 0;
+    bytes = recv(skt.socket, buffer, size, flags);
+    return bytes;
 }
 
 uint64_t skdReceiveFrom(SkdSocket& skt, char* buffer, size_t size, int flags)
