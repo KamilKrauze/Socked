@@ -12,7 +12,7 @@
 > <br>
 
 > ### Bindings
-> Currently there is WIP Odin binding where the library compiles down to a static library that Odin links to.
+> Currently there is WIP Odin binding where the library compiles down to a static library that Odin links to. However, you are free to use the [master-staticlib](https://www.github.com/KamilKrauze/Socked/tree/master-staticlib)
 
 ## Why use it?
 Currently the C/C++ doesn't have its own portable standard implementation for network socket programming.
