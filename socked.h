@@ -19,8 +19,6 @@
 
 #include <cstdint>
 
-typedef uint64_t skdSocketRef;
-
 /// <summary>
 /// Stores socket specification.
 /// </summary>
@@ -57,7 +55,7 @@ struct SkdSocketSpecs
 struct SkdSocket
 {
     // Socket pointer
-    skdSocketRef socket;
+    uint64_t socket;
 
     // Socket specification
     SkdSocketSpecs specs;
@@ -77,7 +75,7 @@ void skdSetSocketSpecs(SkdSocket& skt, uint16_t family, const char* address, uin
 
 /* Socket connection/listening */
 
-skdSocketRef skdAccept(SkdSocket& server_skt, SkdSocket& client_skt);
+void skdAccept(SkdSocket& server_skt, SkdSocket& client_skt);
 void skdBindSocket(SkdSocket& skt, uint16_t family, const char* address, uint16_t port);
 void skdConnectSocket(SkdSocket& skt);
 void skdCreateListener(SkdSocket& skt, uint64_t backlog);

@@ -88,10 +88,10 @@ void skdConnectSocket(SkdSocket& skt)
     }
 }
 
-skdSocketRef skdAccept(SkdSocket& server_skt, SkdSocket& client_skt)
+void skdAccept(SkdSocket& server_skt, SkdSocket& client_skt)
 {
-    int client_addr_size = sizeof(client_skt.specs.address);
-    return accept(server_skt.socket, (struct sockaddr*)&client_skt.specs, &client_addr_size);
+    int client_addr_size = sizeof(client_skt.specs);
+    client_skt.socket = accept(server_skt.socket, (struct sockaddr*)&client_skt.specs, &client_addr_size);
 }
 
 void skdSend(SkdSocket& skt, const char* msg, size_t size, int flags)
