@@ -16,4 +16,4 @@
 
 ## Why use it?
 Currently the C/C++ standard library doesn't have its own portable standard implementation for network socket programming.
-While there are other more popular libraries that do achieve this, I figured that I should create my own to learn socket programming.
+While there are other more popular libraries that do achieve this, I figured that I should create my own to learn socket programming while also making it portable to the best of my ability
