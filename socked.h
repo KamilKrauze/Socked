@@ -73,6 +73,11 @@ void skdCleanupSocket();
 void skdSetSocketOpt(SkdSocket& skt, int level, int optname, int optval);
 void skdSetSocketSpecs(SkdSocket& skt, uint16_t family, const char* address, uint16_t port);
 
+/* Network to Host Conversion */
+
+uint16_t skdGetPortAsHost(uint16_t n_port);
+char* skdGetAddressAsHost(SkdSocket& skt);
+
 /* Socket connection/listening */
 
 void skdAccept(SkdSocket& server_skt, SkdSocket& client_skt);

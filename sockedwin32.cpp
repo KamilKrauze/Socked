@@ -56,6 +56,24 @@ void skdSetSocketSpecs(SkdSocket& skt, uint16_t family, const char* address, uin
     printf("Setting socket specification to: \n\t- Family[%d]\n\t- Addr[%s] ==> [%u]\n\t- Port[%d] ==> [%d]\n", family, address, skt.specs.address.data, port, skt.specs.port);
 }
 
+uint16_t skdGetPortAsHost(uint16_t n_port)
+{
+    return ntohs(n_port);
+}
+
+char* skdGetAddressAsHost(SkdSocket& skt)
+{
+    size_t ipsize = sizeof(skt.specs.address.data);
+    char* ip = new char[ipsize];
+    if (inet_ntop(skt.specs.family, (struct addr_in*)skt.specs.address.data, ip, ipsize) <= 0)
+    {
+        std::cerr << "Invalid address! WSA Error Code: " << WSAGetLastError() << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    return ip;
+}
+
 void skdAccept(SkdSocket& server_skt, SkdSocket& client_skt)
 {
     int client_addr_size = sizeof(client_skt.specs);
