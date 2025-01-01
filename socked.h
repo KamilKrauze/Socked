@@ -75,6 +75,12 @@ extern "C" {
     void skdSetSocketOpt(SkdSocket& skt, int level, int optname, int optval);
     void skdSetSocketSpecs(SkdSocket& skt, uint16_t family, const char* address, uint16_t port);
 
+    /* Network to Host Conversion */
+
+    char* skdAddressFamilyToString(uint16_t family);
+    uint16_t skdGetPortAsHost(uint16_t n_port);
+    char* skdGetIPv4AddressAsHost(SkdSocket& skt);
+
     /* Socket connection/listening */
     void skdAccept(SkdSocket& server_skt, SkdSocket& client_skt);
     void skdBindSocket(SkdSocket& skt, uint16_t family, const char* address, uint16_t port);
@@ -88,9 +94,14 @@ extern "C" {
     // Send data via Datagram
     void skdSendTo(SkdSocket& skt, const char* msg, size_t size, int flags);
     // Receive data from TCP connection
-    int skdReceive(SkdSocket& skt, char* buffer, size_t size, int flags);
+    int64_t skdReceive(SkdSocket& skt, char* buffer, size_t size, int flags);
     // Receive data from Datagram connection.
-    int skdReceiveFrom(SkdSocket& skt, char* buffer, size_t size, int flags);
+    int64_t skdReceiveFrom(SkdSocket& skt, char* buffer, size_t size, int flags);
+
+    /* Debug Utility */
+    void skdPrintSocketAsNetwork(SkdSocket& skt);
+    void skdPrintSocketAsHost(SkdSocket& skt);
+    void skdPrintSocket(SkdSocket& skt);
 };
 
 #endif // !SOCKED_H

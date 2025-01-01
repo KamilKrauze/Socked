@@ -4,8 +4,8 @@
 
 #include <cstdio>
 #include <stdexcept>
-#include <sstream>
 #include <iostream>
+#include <string>
 
 extern "C" {
     void skdInitSocket()
@@ -53,8 +53,29 @@ extern "C" {
             closesocket(skt.socket);
             return;
         }
+    }
 
-        printf("Setting socket specification to: \n\t- Family[%d]\n\t- Addr[%s] ==> [%u]\n\t- Port[%d] ==> [%d]\n", family, address, skt.specs.address.data, port, skt.specs.port);
+    char* skdAddressFamilyToString(uint16_t family)
+    {
+        char* family_str = ((family == AF_INET) ? "IPv4" : (family == AF_INET6) ? "IPv6" : "Unknown");
+        return family_str;
+    }
+
+    uint16_t skdGetPortAsHost(uint16_t n_port)
+    {
+        return ntohs(n_port);
+    }
+
+    char* skdGetIPv4AddressAsHost(SkdSocket& skt)
+    {
+        char* ip = new char[INET_ADDRSTRLEN];
+        if (inet_ntop(AF_INET, &skt.specs.address.data, ip, INET_ADDRSTRLEN) <= 0)
+        {
+            std::cerr << "Invalid address! WSA Error Code: " << WSAGetLastError() << std::endl;
+            exit(EXIT_FAILURE);
+        }
+
+        return ip;
     }
 
     void skdAccept(SkdSocket& server_skt, SkdSocket& client_skt)
@@ -105,17 +126,61 @@ extern "C" {
         sendto(skt.socket, msg, size, flags, (struct sockaddr*)skt.specs.address.data, sizeof(skt.specs.address.data));
     }
 
-    int skdReceive(SkdSocket& skt, char* buffer, size_t size, int flags)
+    int64_t skdReceive(SkdSocket& skt, char* buffer, size_t size, int flags)
     {
         uint64_t bytes = 0;
         bytes = recv(skt.socket, buffer, size, flags);
         return bytes;
     }
 
-    int skdReceiveFrom(SkdSocket& skt, char* buffer, size_t size, int flags)
+    int64_t skdReceiveFrom(SkdSocket& skt, char* buffer, size_t size, int flags)
     {
         int addr_size = sizeof(skt.specs.address.data);
         return recvfrom(skt.socket, buffer, size, flags, (struct sockaddr*)skt.specs.address.data, &addr_size);
+    }
+
+    void skdPrintSocketAsNetwork(SkdSocket& skt)
+    {
+        std::string family = skdAddressFamilyToString(skt.specs.family);
+        std::cout <<
+            "Socket Data:\n" <<
+            "\t- Socket->[" << skt.socket << "]\n"
+            "\t- Specs:\n" <<
+            "\t\t- Family->[" << family << "]\n" <<
+            "\t\t- Port->[" << skt.specs.port << "]\n" <<
+            "\t\t- Address->[" << skt.specs.address.data << "]\n";
+        return;
+    }
+
+    void skdPrintSocketAsHost(SkdSocket& skt)
+    {
+        std::string family = skdAddressFamilyToString(skt.specs.family);
+        uint16_t port = skdGetPortAsHost(skt.specs.port);
+        char* address = skdGetIPv4AddressAsHost(skt);
+        std::cout <<
+            "Socket Data:\n" <<
+            "\t- Socket->[" << skt.socket << "]\n" <<
+            "\t- Specs:\n" <<
+            "\t\t- Family->[" << family << "]\n" <<
+            "\t\t- Port->[" << port << "]\n" <<
+            "\t\t- Address->[" << address << "]\n";
+        return;
+    }
+
+    void skdPrintSocket(SkdSocket& skt)
+    {
+        std::string family = skdAddressFamilyToString(skt.specs.family);
+        uint16_t port = skdGetPortAsHost(skt.specs.port);
+        std::string address = skdGetIPv4AddressAsHost(skt);
+
+        std::cout <<
+            "Socket Data:\n" <<
+            "\t- Socket->[" << skt.socket << "]\n" <<
+            "\t- Specs:\n" <<
+            "\t\t- Family->[" << family << "]\n" <<
+            "\t\t- Port->[" << skt.specs.port << "]->[" << port << "]\n" <<
+            "\t\t- Address->[" << skt.specs.address.data << "]->[" << address << "]\n";
+        return;
     }
 };
 
