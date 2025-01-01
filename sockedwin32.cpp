@@ -141,7 +141,7 @@ int64_t skdReceiveFrom(SkdSocket& skt, char* buffer, size_t size, int flags)
 
 void skdPrintSocketAsNetwork(SkdSocket& skt)
 {
-    auto family = skdAddressFamilyToString(skt.specs.family);
+    char* family = skdAddressFamilyToString(skt.specs.family);
     std::cout <<
         "Socket Data:\n" <<
         "\t- Socket->[" << skt.socket << "]\n"
@@ -149,13 +149,13 @@ void skdPrintSocketAsNetwork(SkdSocket& skt)
         "\t\t - Family->[" << family << "]\n" <<
         "\t\t - Port->[" << skt.specs.port << "]\n" <<
         "\t\t - Address->[" << skt.specs.address.data << "]\n";
-    delete family;
+    delete[] family;
     return;
 }
 
 void skdPrintSocketAsHost(SkdSocket& skt)
 {
-    auto family = skdAddressFamilyToString(skt.specs.family);
+    char* family = skdAddressFamilyToString(skt.specs.family);
     uint16_t port = skdGetPortAsHost(skt.specs.port);
     char* address = skdGetIPv4AddressAsHost(skt);
     std::cout <<
@@ -165,8 +165,8 @@ void skdPrintSocketAsHost(SkdSocket& skt)
         "\t\t - Family->[" << family << "]\n" <<
         "\t\t - Port->[" << port << "]\n" <<
         "\t\t - Address->[" << address << "]\n";
-    delete address;
-    delete family;
+    delete[] address;
+    delete[] family;
     return;
 }
 
@@ -184,8 +184,8 @@ void skdPrintSocket(SkdSocket& skt)
         "\t\t - Port->[" << skt.specs.port << "]->[" << port << "]\n" <<
         "\t\t - Address->[" << skt.specs.address.data << "]->[" << address << "]\n";
 
-    delete address;
-    delete family;
+    delete[] address;
+    delete[] family;
     return;
 }
 
