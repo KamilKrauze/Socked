@@ -89,10 +89,10 @@ void skdSend(SkdSocket& skt, const char* msg, size_t size, int flags);
 void skdSendTo(SkdSocket& skt, const char* msg, size_t size, int flags);
 
 // Receive data from TCP connection
-int skdReceive(SkdSocket& skt, char* buffer, size_t size, int flags);
+int64_t skdReceive(SkdSocket& skt, char* buffer, size_t size, int flags);
 
 // Receive data from Datagram connection.
-int skdReceiveFrom(SkdSocket& skt, char* buffer, size_t size, int flags);
+int64_t skdReceiveFrom(SkdSocket& skt, char* buffer, size_t size, int flags);
 
 #endif // !SOCKED_H
 
