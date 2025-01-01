@@ -61,11 +61,10 @@ uint16_t skdGetPortAsHost(uint16_t n_port)
     return ntohs(n_port);
 }
 
-char* skdGetAddressAsHost(SkdSocket& skt)
+char* skdGetIPv4AddressAsHost(SkdSocket& skt)
 {
-    size_t ipsize = sizeof(skt.specs.address.data);
-    char* ip = new char[ipsize];
-    if (inet_ntop(skt.specs.family, (struct addr_in*)skt.specs.address.data, ip, ipsize) <= 0)
+    char* ip = new char[INET_ADDRSTRLEN];
+    if (inet_ntop(AF_INET, &skt.specs.address.data, ip, INET_ADDRSTRLEN) <= 0)
     {
         std::cerr << "Invalid address! WSA Error Code: " << WSAGetLastError() << std::endl;
         exit(EXIT_FAILURE);

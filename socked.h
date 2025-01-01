@@ -76,7 +76,7 @@ void skdSetSocketSpecs(SkdSocket& skt, uint16_t family, const char* address, uin
 /* Network to Host Conversion */
 
 uint16_t skdGetPortAsHost(uint16_t n_port);
-char* skdGetAddressAsHost(SkdSocket& skt);
+char* skdGetIPv4AddressAsHost(SkdSocket& skt);
 
 /* Socket connection/listening */
 
