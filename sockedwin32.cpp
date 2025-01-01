@@ -4,8 +4,8 @@
 
 #include <cstdio>
 #include <stdexcept>
-#include <sstream>
 #include <iostream>
+#include <string>
 
 void skdInitSocket()
 {
@@ -52,8 +52,12 @@ void skdSetSocketSpecs(SkdSocket& skt, uint16_t family, const char* address, uin
         closesocket(skt.socket);
         return;
     }
+}
 
-    printf("Setting socket specification to: \n\t- Family[%d]\n\t- Addr[%s] ==> [%u]\n\t- Port[%d] ==> [%d]\n", family, address, skt.specs.address.data, port, skt.specs.port);
+char* skdAddressFamilyToString(uint16_t family)
+{
+    char* family_str = ((family == AF_INET) ? "IPv4" : (family == AF_INET6) ? "IPv6" : "Unknown");
+    return family_str;
 }
 
 uint16_t skdGetPortAsHost(uint16_t n_port)
@@ -133,6 +137,43 @@ int64_t skdReceiveFrom(SkdSocket& skt, char* buffer, size_t size, int flags)
 {
     int addr_size = sizeof(skt.specs.address.data);
     return recvfrom(skt.socket, buffer, size, flags, (struct sockaddr*)skt.specs.address.data, &addr_size);
+}
+
+void skdPrintSocketAsNetwork(SkdSocket& skt)
+{
+    auto family = skdAddressFamilyToString(skt.specs.family);
+    printf("Socket Data:\n\t- Socket->[%u]\n\t - Specs:\n\t\t- Family->[%s]\n\t\t- Port->[%u]\n\t\t- Address->[%u]", 
+        skt.socket, family, skt.specs.port, skt.specs.address.data
+    );
+    delete family;
+    return;
+}
+
+void skdPrintSocketAsHost(SkdSocket& skt)
+{
+    auto family = skdAddressFamilyToString(skt.specs.family);
+    uint16_t port = skdGetPortAsHost(skt.specs.port);
+    char* address = skdGetIPv4AddressAsHost(skt);
+    printf("Socket Data:\n\t- Socket->[%u]\n\t - Specs:\n\t\t- Family->[%s]\n\t\t- Port->[%u]\n\t\t- Address->[%s]", 
+        skt.socket, family, port, address);
+    delete address;
+    delete family;
+    return;
+}
+
+void skdPrintSocket(SkdSocket& skt)
+{
+    auto family = skdAddressFamilyToString(skt.specs.family);
+    uint16_t port = skdGetPortAsHost(skt.specs.port);
+    char* address = skdGetIPv4AddressAsHost(skt);
+
+    printf("Socket Data:\n\t- Socket->[%u]\n\t - Specs:\n\t\t- Family->[%s]\n\t\t- Port->[%u]->[%s]\n\t\t- Address->[%u]->[%s]", 
+        skt.socket, family, skt.specs.port, port, skt.specs.address.data, address
+    );
+
+    delete address;
+    delete family;
+    return;
 }
 
 #endif
