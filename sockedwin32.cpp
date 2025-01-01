@@ -145,10 +145,10 @@ void skdPrintSocketAsNetwork(SkdSocket& skt)
     std::cout <<
         "Socket Data:\n" <<
         "\t- Socket->[" << skt.socket << "]\n"
-        "\t - Specs:\n" <<
-        "\t\t - Family->[" << family << "]\n" <<
-        "\t\t - Port->[" << skt.specs.port << "]\n" <<
-        "\t\t - Address->[" << skt.specs.address.data << "]\n";
+        "\t- Specs:\n" <<
+        "\t\t- Family->[" << family << "]\n" <<
+        "\t\t- Port->[" << skt.specs.port << "]\n" <<
+        "\t\t- Address->[" << skt.specs.address.data << "]\n";
     return;
 }
 
@@ -160,10 +160,10 @@ void skdPrintSocketAsHost(SkdSocket& skt)
     std::cout <<
         "Socket Data:\n" <<
         "\t- Socket->[" << skt.socket << "]\n" <<
-        "\t - Specs:\n" <<
-        "\t\t - Family->[" << family << "]\n" <<
-        "\t\t - Port->[" << port << "]\n" <<
-        "\t\t - Address->[" << address << "]\n";
+        "\t- Specs:\n" <<
+        "\t\t- Family->[" << family << "]\n" <<
+        "\t\t- Port->[" << port << "]\n" <<
+        "\t\t- Address->[" << address << "]\n";
     return;
 }
 
@@ -176,10 +176,10 @@ void skdPrintSocket(SkdSocket& skt)
     std::cout <<
         "Socket Data:\n" <<
         "\t- Socket->[" << skt.socket << "]\n" <<
-        "\t - Specs:\n" <<
-        "\t\t - Family->[" << family << "]\n" <<
-        "\t\t - Port->[" << skt.specs.port << "]->[" << port << "]\n" <<
-        "\t\t - Address->[" << skt.specs.address.data << "]->[" << address << "]\n";
+        "\t- Specs:\n" <<
+        "\t\t- Family->[" << family << "]\n" <<
+        "\t\t- Port->[" << skt.specs.port << "]->[" << port << "]\n" <<
+        "\t\t- Address->[" << skt.specs.address.data << "]->[" << address << "]\n";
     return;
 }
 
