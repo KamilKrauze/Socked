@@ -52,7 +52,7 @@ char* skdAddressFamilyToString(uint16_t family)
 {
     // char* family_str = ((family == AF_INET) ? "IPv4" : (family == AF_INET6) ? "IPv6" : "Unknown");
     // return family_str;
-    return nullptr
+    return nullptr;
 }
 
 uint16_t skdGetPortAsHost(uint16_t n_port)
