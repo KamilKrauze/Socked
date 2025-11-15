@@ -116,24 +116,24 @@ void skdConnectSocket(SkdSocket& skt)
 }
 
 
-void skdSend(SkdSocket& skt, const char* msg, size_t size, int flags)
+void skdSend(SkdSocket& skt, const char* msg, int size, int flags)
 {
     send(skt.socket, msg, size, flags);
 }
 
-void skdSendTo(SkdSocket& skt, const char* msg, size_t size, int flags)
+void skdSendTo(SkdSocket& skt, const char* msg, int size, int flags)
 {
     sendto(skt.socket, msg, size, flags, (struct sockaddr*)skt.specs.address.data, sizeof(skt.specs.address.data));
 }
 
-int64_t skdReceive(SkdSocket& skt, char* buffer, size_t size, int flags)
+uint64_t skdReceive(SkdSocket& skt, char* buffer, int size, int flags)
 {
     uint64_t bytes = 0;
     bytes = recv(skt.socket, buffer, size, flags);
     return bytes;
 }
 
-int64_t skdReceiveFrom(SkdSocket& skt, char* buffer, size_t size, int flags)
+uint64_t skdReceiveFrom(SkdSocket& skt, char* buffer, int size, int flags)
 {
     int addr_size = sizeof(skt.specs.address.data);
     return recvfrom(skt.socket, buffer, size, flags, (struct sockaddr*)skt.specs.address.data, &addr_size);
